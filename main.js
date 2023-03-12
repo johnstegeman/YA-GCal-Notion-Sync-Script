@@ -3,6 +3,7 @@ const DATE_NOTION = "Date";
 const TAGS_NOTION = "Tags";
 const LOCATION_NOTION = "Location";
 const DESCRIPTION_NOTION = "Description";
+const LINK_NOTION = "Link";
 
 const EVENT_ID_NOTION = "Event ID";
 const CALENDAR_NAME_NOTION = "Calendar";
@@ -21,7 +22,7 @@ const CANCELLED_TAG_NAME = "Cancelled/Removed";
 const IGNORE_SYNC_TAG_NAME = "Ignore Sync";
 
 // Relative to the time of last full sync in days.
-const RELATIVE_MAX_DAY = 1825; // 5 years
+const RELATIVE_MAX_DAY = 1095; // 3 years
 const RELATIVE_MIN_DAY = 30;
 
 function main() {
@@ -552,6 +553,19 @@ function convertToNotionProperty(event, existing_tags = []) {
       },
     ],
   };
+
+  if (event.conferenceData)
+  {
+    entryPoints = event.conferenceData.entryPoints;
+
+    if (entryPoints)
+    {
+      properties[LINK_NOTION] = {
+        type: "url",
+        url: entryPoints[0].uri ? entryPoints[0].uri : ""
+      };
+    }
+  }
 
   if (event.start) {
     let start_time;
